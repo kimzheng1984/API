@@ -1,0 +1,55 @@
+# coding:utf-8
+
+import unittest
+import requests
+import json
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+token = '785be082c4ad49f65701ae34b8ff834e'
+# userid = '61044'
+userid = '1'
+username = 'yk'
+password = 'yk'
+
+
+class shanghutong(unittest.TestCase):
+    """获取订单列表"""
+    def setUp(self):
+        self.base_url = 'http://121.43.60.118:8082/order/list/all'
+        self.payload = {'token': token, 'userId': userid, 'mchId': '2485'}
+
+    def tearDown(self):
+        pass
+
+    def test22_orderall(self):
+        test_result = 'C:\\WORK\\workspace\\python\\report\\shanghutong20'
+        filename = test_result + "\\" + 'result.txt'
+        f = open(filename, 'a')
+        r = requests.get(self.base_url, self.payload)
+        code = r.status_code
+        try:
+            self.assertEqual(code, 200)
+        except AssertionError:
+            print code
+
+        text = r.text
+        try:
+            self.assertIn(u'成功', text)
+        except AssertionError:
+            print text
+
+        hjson = json.loads(r.text.encode('utf-8'))
+        try:
+            self.assertIn(u'code', hjson)
+        except AssertionError:
+            print hjson
+
+        # f.write(str(code)+'\n')
+        f.write("case22:获取订单列表"+'\n'+'\n'+str(text)+'\n'+'\n'+'\n')
+        # f.write(str(hjson)+'\n')
+        f.close()
+
+if __name__ == "__main__":
+    unittest.main()
